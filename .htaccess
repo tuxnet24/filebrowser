@@ -1,0 +1,485 @@
+# File: .htaccess
+# Created: 2023-03-17 00:21:15
+# Author: Marko Schulz <info@tuxnet24.de>
+# Description: Responsive Apache Directory Listing
+
+# Enable the directory listing
+Options +Indexes
+
+<IfModule mod_mime.c>
+
+    # Add Proper MIME-Type for Favicon
+    AddType image/x-icon .ico
+    
+</IfModule>
+
+# Enable long browser caching for resource files.
+<FilesMatch "\.(ico|png|jpe?g|gif|svg|js|css)$">
+
+	<IfModule mod_expires.c>
+
+		# Set a far future expiration date.
+		ExpiresActive on
+		ExpiresDefault "access plus 1 month"
+
+	</IfModule>
+	
+	# Remove Entity Tags.
+	FileETag none
+	
+</FilesMatch>
+
+# Settings for mod_deflate.
+<IfModule mod_deflate.c>
+
+	# Set compression by type.
+	AddOutputFilterByType DEFLATE text/plain
+	AddOutputFilterByType DEFLATE text/html
+	AddOutputFilterByType DEFLATE text/xml
+	AddOutputFilterByType DEFLATE text/css
+	AddOutputFilterByType DEFLATE text/javascript
+	AddOutputFilterByType DEFLATE application/xml
+	AddOutputFilterByType DEFLATE application/xhtml+xml
+	AddOutputFilterByType DEFLATE application/rss+xml
+	AddOutputFilterByType DEFLATE application/javascript
+	AddOutputFilterByType DEFLATE application/x-javascript
+	AddOutputFilterByType DEFLATE image/svg+xml
+	
+	# Compress webfonts.
+	<FilesMatch "\.(ttf|otf|woff|eot|svg|svgz)$" >
+		SetOutputFilter DEFLATE
+	</FilesMatch>
+
+	# Deactivate compression for buggy browsers.
+	BrowserMatch ^Mozilla/4 gzip-only-text/html
+	BrowserMatch ^Mozilla/4.0[678] no-gzip
+	BrowserMatch bMSIE !no-gzip !gzip-only-text/html
+ 
+	# Set header information for proxies.
+	Header append Vary User-Agent
+
+</IfModule>
+
+<IfModule mod_headers.c>
+	
+	# Force the Internet Explorer to use its latest engine.
+	Header add X-UA-Compatible "IE=edge"
+	
+</IfModule>
+
+<IfModule mod_autoindex.c>
+
+    # Set the index options.
+    IndexOptions Charset=UTF-8
+    IndexOptions XHTML
+    IndexOptions HTMLTable
+    IndexOptions FancyIndexing
+    IndexOptions IgnoreCase
+    IndexOptions FoldersFirst
+    IndexOptions SuppressRules
+    IndexOptions IconsAreLinks
+    IndexOptions SuppressHTMLPreamble
+    IndexOptions NameWidth=*
+    IndexOptions DescriptionWidth=*
+    #IndexOptions IconHeight=32
+    #IndexOptions IconHeight=28
+
+	# Set absolute paths to header and footer files.
+    HeaderName /indexlisting/header.html
+    ReadmeName /indexlisting/footer.html
+
+    # Ignore all files in the public directory.
+    IndexIgnore /indexlisting
+
+    # Overwrite the default icons with a placeholder.
+    AddIcon (blank,/indexlisting/img/blank.gif) ^^BLANKICON^^
+    AddIcon (directory,/indexlisting/img/folder.png) ^^DIRECTORY^^
+    AddIcon (directory-parent,/indexlisting/img/back.png) ..
+
+	# Debian file type icons and descriptions.
+    AddDescription "Gnu Zipped Archive" .gz
+    AddIcon (file-compressed-gz,/indexlisting/img/zip.png) .gz
+    AddDescription "OpenPGP signature" .gpg
+    AddIcon (file-data-csv,/indexlisting/img/file.png) .gpg
+    AddDescription "APT Metadata file" InRelease
+    AddIcon (file-data-csv,/indexlisting/img/file.png) InRelease
+    AddDescription "APT Metadata file" Release
+    AddIcon (file-data-csv,/indexlisting/img/file.png) Release
+    AddDescription "APT Metadata file" Packages
+    AddIcon (file-data-csv,/indexlisting/img/file.png) Packages
+
+    # Add file type icons and descriptions.
+	AddDescription "Microsoft Word Document" .doc
+    AddIcon (file-text-doc,/indexlisting/img/text.png) .doc
+    AddDescription "Microsoft Word Open XML Document" .docx
+    AddIcon (file-text-docx,/indexlisting/img/text.png) .docx
+    AddDescription "Log File" .log
+    AddIcon (file-text-log,/indexlisting/img/text.png) .log
+    AddDescription "Outlook Mail Message" .msg
+    AddIcon (file-text-msg,/indexlisting/img/text.png) .msg
+    AddDescription "OpenDocument Text Document" .odt
+    AddIcon (file-text-odt,/indexlisting/img/text.png) .odt
+    AddDescription "Pages Document" .pages
+    AddIcon (file-text-pages,/indexlisting/img/text.png) .pages
+    AddDescription "Rich Text Format File" .rtf
+    AddIcon (file-text-rtf,/indexlisting/img/text.png) .rtf
+    AddDescription "LaTeX Source Document" .tex
+    AddIcon (file-text-tex,/indexlisting/img/text.png) .tex
+    AddDescription "Plain Text File" .txt
+    AddIcon (file-text-txt,/indexlisting/img/text.png) .txt
+    AddDescription "WordPerfect Document" .wpd
+    AddIcon (file-text-wpd,/indexlisting/img/text.png) .wpd
+    AddDescription "Microsoft Works Word Processor Document" .wps
+    AddIcon (file-text-wps,/indexlisting/img/text.png) .wps
+    AddDescription "Comma Separated Values File" .csv
+    AddIcon (file-data-csv,/indexlisting/img/file.png) .csv
+    AddDescription "Data File" .dat
+    AddIcon (file-data-dat,/indexlisting/img/file.png) .dat
+    AddDescription "Gerber File" .gbr
+    AddIcon (file-data-gbr,/indexlisting/img/file.png) .gbr
+    AddDescription "GEDCOM Genealogy Data File" .ged
+    AddIcon (file-data-ged,/indexlisting/img/file.png) .ged
+    AddDescription "Multi-Touch iBook" .ibooks
+    AddIcon (file-data-ibooks,/indexlisting/img/file.png) .ibooks
+    AddDescription "Keynote Presentation" .key
+    AddIcon (file-data-key,/indexlisting/img/file.png) .key
+    AddDescription "Mac OS X Keychain File" .keychain
+    AddIcon (file-data-keychain,/indexlisting/img/file.png) .keychain
+    AddDescription "PowerPoint Slide Show" .pps
+    AddIcon (file-data-pps,/indexlisting/img/file.png) .pps
+    AddDescription "PowerPoint Presentation" .ppt
+    AddIcon (file-data-ppt,/indexlisting/img/file.png) .ppt
+    AddDescription "PowerPoint Open XML Presentation" .pptx
+    AddIcon (file-data-pptx,/indexlisting/img/file.png) .pptx
+    AddDescription "Standard Data File" .sdf
+    AddIcon (file-data-sdf,/indexlisting/img/file.png) .sdf
+    AddDescription "Consolidated Unix File Archive" .tar
+    AddIcon (file-data-tar,/indexlisting/img/file.png) .tar
+    AddDescription "TurboTax 2012 Tax Return" .tax2012
+    AddIcon (file-data-tax2012,/indexlisting/img/file.png) .tax2012
+    AddDescription "vCard File" .vcf
+    AddIcon (file-data-vcf,/indexlisting/img/file.png) .vcf
+    AddDescription "XML File" .xml
+    AddIcon (file-data-xml,/indexlisting/img/file.png) .xml
+    AddDescription "Audio Interchange File Format" .aif
+    AddIcon (file-audio-aif,/indexlisting/img/audio.png) .aif
+    AddDescription "Interchange File Format" .iff
+    AddIcon (file-audio-iff,/indexlisting/img/audio.png) .iff
+    AddDescription "Media Playlist File" .m3u
+    AddIcon (file-audio-m3u,/indexlisting/img/audio.png) .m3u
+    AddDescription "MPEG-4 Audio File" .m4a
+    AddIcon (file-audio-m4a,/indexlisting/img/audio.png) .m4a
+    AddDescription "MIDI File" .mid
+    AddIcon (file-audio-mid,/indexlisting/img/audio.png) .mid
+    AddDescription "MP3 Audio File" .mp3
+    AddIcon (file-audio-mp3,/indexlisting/img/audio.png) .mp3
+    AddDescription "MPEG-2 Audio File" .mpa
+    AddIcon (file-audio-mpa,/indexlisting/img/audio.png) .mpa
+    AddDescription "Real Audio File" .ra
+    AddIcon (file-audio-ra,/indexlisting/img/audio.png) .ra
+    AddDescription "WAVE Audio File" .wav
+    AddIcon (file-audio-wav,/indexlisting/img/audio.png) .wav
+    AddDescription "Windows Media Audio File" .wma
+    AddIcon (file-audio-wma,/indexlisting/img/audio.png) .wma
+    AddDescription "3GPP2 Multimedia File" .3g2
+    AddIcon (file-video-3g2,/indexlisting/img/movie.png) .3g2
+    AddDescription "3GPP Multimedia File" .3gp
+    AddIcon (file-video-3gp,/indexlisting/img/movie.png) .3gp
+    AddDescription "Advanced Systems Format File" .asf
+    AddIcon (file-video-asf,/indexlisting/img/movie.png) .asf
+    AddDescription "Microsoft ASF Redirector File" .asx
+    AddIcon (file-video-asx,/indexlisting/img/movie.png) .asx
+    AddDescription "Audio Video Interleave File" .avi
+    AddIcon (file-video-avi,/indexlisting/img/movie.png) .avi
+    AddDescription "Flash Video File" .flv
+    AddIcon (file-video-flv,/indexlisting/img/movie.png) .flv
+    AddDescription "iTunes Video File" .m4v
+    AddIcon (file-video-m4v,/indexlisting/img/movie.png) .m4v
+    AddDescription "Apple QuickTime Movie" .mov
+    AddIcon (file-video-mov,/indexlisting/img/movie.png) .mov
+    AddDescription "MPEG-4 Video File" .mp4
+    AddIcon (file-video-mp4,/indexlisting/img/movie.png) .mp4
+    AddDescription "MPEG Video File" .mpg
+    AddIcon (file-video-mpg,/indexlisting/img/movie.png) .mpg
+    AddDescription "Real Media File" .rm
+    AddIcon (file-video-rm,/indexlisting/img/movie.png) .rm
+    AddDescription "SubRip Subtitle File" .srt
+    AddIcon (file-video-srt,/indexlisting/img/movie.png) .srt
+    AddDescription "Shockwave Flash Movie" .swf
+    AddIcon (file-video-swf,/indexlisting/img/movie.png) .swf
+    AddDescription "DVD Video Object File" .vob
+    AddIcon (file-video-vob,/indexlisting/img/movie.png) .vob
+    AddDescription "Windows Media Video File" .wmv
+    AddIcon (file-video-wmv,/indexlisting/img/movie.png) .wmv
+    AddDescription "Rhino 3D Model" .3dm
+    AddIcon (file-3d-image-3dm,/indexlisting/img/img.png) .3dm
+    AddDescription "3D Studio Scene" .3ds
+    AddIcon (file-3d-image-3ds,/indexlisting/img/img.png) .3ds
+    AddDescription "3ds Max Scene File" .max
+    AddIcon (file-3d-image-max,/indexlisting/img/img.png) .max
+    AddDescription "Wavefront 3D Object File" .obj
+    AddIcon (file-3d-image-obj,/indexlisting/img/img.png) .obj
+    AddDescription "Bitmap Image File" .bmp
+    AddIcon (file-raster-image-bmp,/indexlisting/img/img.png) .bmp
+    AddDescription "DirectDraw Surface" .dds
+    AddIcon (file-raster-image-dds,/indexlisting/img/img.png) .dds
+    AddDescription "Graphical Interchange Format File" .gif
+    AddIcon (file-raster-image-gif,/indexlisting/img/img.png) .gif
+    AddDescription "JPEG Image" .jpg
+    AddIcon (file-raster-image-jpg,/indexlisting/img/img.png) .jpg
+    AddDescription "Portable Network Graphic" .png
+    AddIcon (file-raster-image-png,/indexlisting/img/img.png) .png
+    AddDescription "Adobe Photoshop Document" .psd
+    AddIcon (file-raster-image-psd,/indexlisting/img/img.png) .psd
+    AddDescription "PaintShop Pro Image" .pspimage
+    AddIcon (file-raster-image-pspimage,/indexlisting/img/img.png) .pspimage
+    AddDescription "Targa Graphic" .tga
+    AddIcon (file-raster-image-tga,/indexlisting/img/img.png) .tga
+    AddDescription "Thumbnail Image File" .thm
+    AddIcon (file-raster-image-thm,/indexlisting/img/img.png) .thm
+    AddDescription "Tagged Image File" .tif
+    AddIcon (file-raster-image-tif,/indexlisting/img/img.png) .tif
+    AddDescription "Tagged Image File Format" .tiff
+    AddIcon (file-raster-image-tiff,/indexlisting/img/img.png) .tiff
+    AddDescription "YUV Encoded Image File" .yuv
+    AddIcon (file-raster-image-yuv,/indexlisting/img/img.png) .yuv
+    AddDescription "Adobe Illustrator File" .ai
+    AddIcon (file-vector-image-ai,/indexlisting/img/img.png) .ai
+    AddDescription "Encapsulated PostScript File" .eps
+    AddIcon (file-vector-image-eps,/indexlisting/img/img.png) .eps
+    AddDescription "PostScript File" .ps
+    AddIcon (file-vector-image-ps,/indexlisting/img/img.png) .ps
+    AddDescription "Scalable Vector Graphics File" .svg
+    AddIcon (file-vector-image-svg,/indexlisting/img/img.png) .svg
+    AddDescription "Adobe InDesign Document" .indd
+    AddIcon (file-page-layout-indd,/indexlisting/img/file.png) .indd
+    AddDescription "Picture File" .pct
+    AddIcon (file-page-layout-pct,/indexlisting/img/file.png) .pct
+    AddDescription "Portable Document Format File" .pdf
+    AddIcon (file-page-layout-pdf,/indexlisting/img/file.png) .pdf
+    AddDescription "Works Spreadsheet" .xlr
+    AddIcon (file-spreadsheet-xlr,/indexlisting/img/file.png) .xlr
+    AddDescription "Excel Spreadsheet" .xls
+    AddIcon (file-spreadsheet-xls,/indexlisting/img/file.png) .xls
+    AddDescription "Microsoft Excel Open XML Spreadsheet" .xlsx
+    AddIcon (file-spreadsheet-xlsx,/indexlisting/img/file.png) .xlsx
+    AddDescription "Access 2007 Database File" .accdb
+    AddIcon (file-database-accdb,/indexlisting/img/file.png) .accdb
+    AddDescription "Database File" .db
+    AddIcon (file-database-db,/indexlisting/img/file.png) .db
+    AddDescription "Database File" .dbf
+    AddIcon (file-database-dbf,/indexlisting/img/file.png) .dbf
+    AddDescription "Microsoft Access Database" .mdb
+    AddIcon (file-database-mdb,/indexlisting/img/file.png) .mdb
+    AddDescription "Program Database" .pdb
+    AddIcon (file-database-pdb,/indexlisting/img/file.png) .pdb
+    AddDescription "Structured Query Language Data File" .sql
+    AddIcon (file-database-sql,/indexlisting/img/file.png) .sql
+    AddDescription "Android Package File" .apk
+    AddIcon (file-executable-apk,/indexlisting/img/file.png) .apk
+    AddDescription "Mac OS X Application" .app
+    AddIcon (file-executable-app,/indexlisting/img/file.png) .app
+    AddDescription "DOS Batch File" .bat
+    AddIcon (file-executable-bat,/indexlisting/img/file.png) .bat
+    AddDescription "Common Gateway Interface Script" .cgi
+    AddIcon (file-executable-cgi,/indexlisting/img/file.png) .cgi
+    AddDescription "DOS Command File" .com
+    AddIcon (file-executable-com,/indexlisting/img/file.png) .com
+    AddDescription "Windows Executable File" .exe
+    AddIcon (file-executable-exe,/indexlisting/img/file.png) .exe
+    AddDescription "Windows Gadget" .gadget
+    AddIcon (file-executable-gadget,/indexlisting/img/file.png) .gadget
+    AddDescription "Java Archive File" .jar
+    AddIcon (file-executable-jar,/indexlisting/img/file.png) .jar
+    AddDescription "Program Information File" .pif
+    AddIcon (file-executable-pif,/indexlisting/img/file.png) .pif
+    AddDescription "VBScript File" .vb
+    AddIcon (file-executable-vb,/indexlisting/img/file.png) .vb
+    AddDescription "Windows Script File" .wsf
+    AddIcon (file-executable-wsf,/indexlisting/img/file.png) .wsf
+    AddDescription "Video Game Demo File" .dem
+    AddIcon (file-game-dem,/indexlisting/img/movie.png) .dem
+    AddDescription "Saved Game File" .gam
+    AddIcon (file-game-gam,/indexlisting/img/file.png) .gam
+    AddDescription "Nintendo (NES) ROM File" .nes
+    AddIcon (file-game-nes,/indexlisting/img/file.png) .nes
+    AddDescription "N64 Game ROM File" .rom
+    AddIcon (file-game-rom,/indexlisting/img/file.png) .rom
+    AddDescription "Saved Game" .sav
+    AddIcon (file-game-sav,/indexlisting/img/file.png) .sav
+    AddDescription "AutoCAD Drawing Database File" .dwg
+    AddIcon (file-cad-dwg,/indexlisting/img/file.png) .dwg
+    AddDescription "Drawing Exchange Format File" .dxf
+    AddIcon (file-cad-dxf,/indexlisting/img/file.png) .dxf
+    AddDescription "GPS Exchange File" .gpx
+    AddIcon (file-gis-gpx,/indexlisting/img/file.png) .gpx
+    AddDescription "Keyhole Markup Language File" .kml
+    AddIcon (file-gis-kml,/indexlisting/img/file.png) .kml
+    AddDescription "Google Earth Placemark File" .kmz
+    AddIcon (file-gis-kmz,/indexlisting/img/file.png) .kmz
+    AddDescription "Active Server Page" .asp
+    AddIcon (file-web-asp,/indexlisting/img/file.png) .asp
+    AddDescription "Active Server Page Extended File" .aspx
+    AddIcon (file-web-aspx,/indexlisting/img/file.png) .aspx
+    AddDescription "Internet Security Certificate" .cer
+    AddIcon (file-web-cer,/indexlisting/img/file.png) .cer
+    AddDescription "ColdFusion Markup File" .cfm
+    AddIcon (file-web-cfm,/indexlisting/img/file.png) .cfm
+    AddDescription "Certificate Signing Request File" .csr
+    AddIcon (file-web-csr,/indexlisting/img/file.png) .csr
+    AddDescription "Cascading Style Sheet" .css
+    AddIcon (file-web-css,/indexlisting/img/file.png) .css
+    AddDescription "Hypertext Markup Language File" .htm
+    AddIcon (file-web-htm,/indexlisting/img/text.png) .htm
+    AddDescription "Hypertext Markup Language File" .html
+    AddIcon (file-web-html,/indexlisting/img/text.png) .html
+    AddDescription "JavaScript File" .js
+    AddIcon (file-web-js,/indexlisting/img/file.png) .js
+    AddDescription "Java Server Page" .jsp
+    AddIcon (file-web-jsp,/indexlisting/img/file.png) .jsp
+    AddDescription "PHP Source Code File" .php
+    AddIcon (file-web-php,/indexlisting/img/file.png) .php
+    AddDescription "PHP Web Page" .phtml
+    AddIcon (file-web-phtml,/indexlisting/img/file.png) .phtml
+    AddDescription "Rich Site Summary" .rss
+    AddIcon (file-web-rss,/indexlisting/img/file.png) .rss
+    AddDescription "Extensible Hypertext Markup Language File" .xhtml
+    AddIcon (file-web-xhtml,/indexlisting/img/text.png) .xhtml
+    AddDescription "Chrome Extension" .crx
+    AddIcon (file-plugin-crx,/indexlisting/img/file.png) .crx
+    AddDescription "Mac OS X Plug-in" .plugin
+    AddIcon (file-plugin-plugin,/indexlisting/img/file.png) .plugin
+    AddDescription "Windows Font File" .fnt
+    AddIcon (file-font-fnt,/indexlisting/img/file.png) .fnt
+    AddDescription "Generic Font File" .fon
+    AddIcon (file-font-fon,/indexlisting/img/file.png) .fon
+    AddDescription "OpenType Font" .otf
+    AddIcon (file-font-otf,/indexlisting/img/file.png) .otf
+    AddDescription "TrueType Font" .ttf
+    AddIcon (file-font-ttf,/indexlisting/img/file.png) .ttf
+    AddDescription "Windows Cabinet File" .cab
+    AddIcon (file-system-cab,/indexlisting/img/file.png) .cab
+    AddDescription "Windows Control Panel Item" .cpl
+    AddIcon (file-system-cpl,/indexlisting/img/file.png) .cpl
+    AddDescription "Windows Cursor" .cur
+    AddIcon (file-system-cur,/indexlisting/img/file.png) .cur
+    AddDescription "Windows 8 Desktop Theme Pack File" .deskthemepack
+    AddIcon (file-system-deskthemepack,/indexlisting/img/file.png) .deskthemepack
+    AddDescription "Dynamic Link Library" .dll
+    AddIcon (file-system-dll,/indexlisting/img/file.png) .dll
+    AddDescription "Windows Memory Dump" .dmp
+    AddIcon (file-system-dmp,/indexlisting/img/file.png) .dmp
+    AddDescription "Device Driver" .drv
+    AddIcon (file-system-drv,/indexlisting/img/file.png) .drv
+    AddDescription "Mac OS X Icon Resource File" .icns
+    AddIcon (file-system-icns,/indexlisting/img/file.png) .icns
+    AddDescription "Icon File" .ico
+    AddIcon (file-system-ico,/indexlisting/img/file.png) .ico
+    AddDescription "Windows File Shortcut" .lnk
+    AddIcon (file-system-lnk,/indexlisting/img/file.png) .lnk
+    AddDescription "Windows System File" .sys
+    AddIcon (file-system-sys,/indexlisting/img/file.png) .sys
+    AddDescription "Configuration File" .cfg
+    AddIcon (file-settings-cfg,/indexlisting/img/file.png) .cfg
+    AddDescription "Windows Initialization File" .ini
+    AddIcon (file-settings-ini,/indexlisting/img/file.png) .ini
+    AddDescription "Outlook Profile File" .prf
+    AddIcon (file-settings-prf,/indexlisting/img/file.png) .prf
+    AddDescription "BinHex 40 Encoded File" .hqx
+    AddIcon (file-encoded-hqx,/indexlisting/img/file.png) .hqx
+    AddDescription "Multi-Purpose Internet Mail Message File" .mim
+    AddIcon (file-encoded-mim,/indexlisting/img/file.png) .mim
+    AddDescription "Uuencoded File" .uue
+    AddIcon (file-encoded-uue,/indexlisting/img/file.png) .uue
+    AddDescription "7-Zip Compressed File" .7z
+    AddIcon (file-compressed-7z,/indexlisting/img/zip.png) .7z
+    AddDescription "Comic Book RAR Archive" .cbr
+    AddIcon (file-compressed-cbr,/indexlisting/img/zip.png) .cbr
+    AddDescription "Debian Software Package" .deb
+    AddIcon (file-compressed-deb,/indexlisting/img/zip.png) .deb
+    AddDescription "Mac OS X Installer Package" .pkg
+    AddIcon (file-compressed-pkg,/indexlisting/img/zip.png) .pkg
+    AddDescription "WinRAR Compressed Archive" .rar
+    AddIcon (file-compressed-rar,/indexlisting/img/zip.png) .rar
+    AddDescription "Red Hat Package Manager File" .rpm
+    AddIcon (file-compressed-rpm,/indexlisting/img/zip.png) .rpm
+    AddDescription "StuffIt X Archive" .sitx
+    AddIcon (file-compressed-sitx,/indexlisting/img/zip.png) .sitx
+    AddDescription "Compressed Tarball File" .targz
+    AddIcon (file-compressed-targz,/indexlisting/img/zip.png) .targz
+    AddDescription "Compressed Tarball File" .tar.gz
+    AddIcon (file-compressed-targz,/indexlisting/img/zip.png) .tar.gz
+    AddDescription "Compressed Tarball File" .tar
+    AddIcon (file-compressed-targz,/indexlisting/img/zip.png) .tar
+    AddDescription "Zipped File" .zip
+    AddIcon (file-compressed-zip,/indexlisting/img/zip.png) .zip
+    AddDescription "Extended Zip File" .zipx
+    AddIcon (file-compressed-zipx,/indexlisting/img/zip.png) .zipx
+    AddDescription "Binary Disc Image" .bin
+    AddIcon (file-disk-image-bin,/indexlisting/img/file.png) .bin
+    AddDescription "Cue Sheet File" .cue
+    AddIcon (file-disk-image-cue,/indexlisting/img/file.png) .cue
+    AddDescription "Mac OS X Disk Image" .dmg
+    AddIcon (file-disk-image-dmg,/indexlisting/img/file.png) .dmg
+    AddDescription "Disc Image File" .iso
+    AddIcon (file-disk-image-iso,/indexlisting/img/file.png) .iso
+    AddDescription "Media Disc Image File" .mdf
+    AddIcon (file-disk-image-mdf,/indexlisting/img/file.png) .mdf
+    AddDescription "Toast Disc Image" .toast
+    AddIcon (file-disk-image-toast,/indexlisting/img/file.png) .toast
+    AddDescription "Virtual CD" .vcd
+    AddIcon (file-disk-image-vcd,/indexlisting/img/file.png) .vcd
+    AddDescription "C/C++ Source Code File" .c
+    AddIcon (file-developer-c,/indexlisting/img/file.png) .c
+    AddDescription "Java Class File" .class
+    AddIcon (file-developer-class,/indexlisting/img/file.png) .class
+    AddDescription "C++ Source Code File" .cpp
+    AddIcon (file-developer-cpp,/indexlisting/img/file.png) .cpp
+    AddDescription "Visual C# Source Code File" .cs
+    AddIcon (file-developer-cs,/indexlisting/img/file.png) .cs
+    AddDescription "Document Type Definition File" .dtd
+    AddIcon (file-developer-dtd,/indexlisting/img/file.png) .dtd
+    AddDescription "Adobe Flash Animation" .fla
+    AddIcon (file-developer-fla,/indexlisting/img/file.png) .fla
+    AddDescription "C/C++/Objective-C Header File" .h
+    AddIcon (file-developer-h,/indexlisting/img/file.png) .h
+    AddDescription "Java Source Code File" .java
+    AddIcon (file-developer-java,/indexlisting/img/file.png) .java
+    AddDescription "Lua Source File" .lua
+    AddIcon (file-developer-lua,/indexlisting/img/file.png) .lua
+    AddDescription "Objective-C Implementation File" .m
+    AddIcon (file-developer-m,/indexlisting/img/file.png) .m
+    AddDescription "Perl Script" .pl
+    AddIcon (file-developer-pl,/indexlisting/img/file.png) .pl
+    AddDescription "Python Script" .py
+    AddIcon (file-developer-py,/indexlisting/img/file.png) .py
+    AddDescription "Bash Shell Script" .sh
+    AddIcon (file-developer-sh,/indexlisting/img/file.png) .sh
+    AddDescription "Visual Studio Solution File" .sln
+    AddIcon (file-developer-sln,/indexlisting/img/file.png) .sln
+    AddDescription "Swift Source Code File" .swift
+    AddIcon (file-developer-swift,/indexlisting/img/file.png) .swift
+    AddDescription "Visual C++ Project" .vcxproj
+    AddIcon (file-developer-vcxproj,/indexlisting/img/file.png) .vcxproj
+    AddDescription "Xcode Project" .xcodeproj
+    AddIcon (file-developer-xcodeproj,/indexlisting/img/file.png) .xcodeproj
+    AddDescription "Backup File" .bak
+    AddIcon (file-backup-bak,/indexlisting/img/file.png) .bak
+    AddDescription "Temporary File" .tmp
+    AddIcon (file-backup-tmp,/indexlisting/img/file.png) .tmp
+    AddDescription "Chrome Partially Downloaded File" .crdownload
+    AddIcon (file-misc-crdownload,/indexlisting/img/file.png) .crdownload
+    AddDescription "iCalendar File" .ics
+    AddIcon (file-misc-ics,/indexlisting/img/file.png) .ics
+    AddDescription "Windows Installer Package" .msi
+    AddIcon (file-misc-msi,/indexlisting/img/file.png) .msi
+    AddDescription "Partially Downloaded File" .part
+    AddIcon (file-misc-part,/indexlisting/img/file.png) .part
+    AddDescription "BitTorrent File" .torrent
+    AddIcon (file-misc-torrent,/indexlisting/img/file.png) .torrent
+
+    DefaultIcon /indexlisting/img/file.png
+    
+</IfModule>
+
+# vim: syntax=apache ts=4 sw=4 sts=4 sr noet
