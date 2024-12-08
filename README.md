@@ -34,6 +34,6 @@ Vim is your best friend (search/replace) ;-p
 
 ![screen4.png](screen4.png "Mobile dark mode")
 
-**Mobile ight mode, display help**
+**Mobile light mode, display help**
 
 ![screen5.png](screen5.png "Mobile ight mode, display help")
